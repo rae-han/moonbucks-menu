@@ -1,4 +1,10 @@
-const category = [
+console.log('javascipt')
+
+// Elements
+const $menuForm = document.querySelector('#menuForm');
+const $menuName = document.querySelector('#menuName');
+
+let categories = [
   { 
     id: 'espresso',
     text: '☕ 에스프레소',
@@ -26,13 +32,24 @@ const category = [
   },
 ];
 
-const selectedOption = {
+const selected = {
   category: 'espresso',
 }
 
 const addMenu = e => {
   e.preventDefault();
-  e.stopPropagation();
-  console.log('add: menu');
+
+  const menuName = $menuName.value;
+
+  if(menuName === '') return false;
+
+  categories = categories.map(category => category.id === selected.category ? { ...category, menu: category.menu.concat(menuName) }  : category);
+  console.log(categories);  
+
+  $menuName.value = '';
 }
+
+$menuForm.addEventListener('submit', addMenu);
+
+console.log(addMenu)
 
