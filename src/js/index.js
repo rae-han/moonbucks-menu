@@ -1,4 +1,6 @@
-console.log('javascipt')
+console.log('javascipt');
+
+import './customElement.js';
 
 // Elements
 const $menuForm = document.querySelector('#menuForm');
@@ -36,6 +38,15 @@ const selected = {
   category: 'espresso',
 }
 
+const makeMenuListItem = () => {
+  let menuList = categories.find(category => category.id === selected.category).menu;
+  console.log(menuList);
+
+  let $menuList = menuList.map(item => {
+    let item = document.createElement('menu-item');
+  })
+}
+
 const addMenu = e => {
   e.preventDefault();
 
@@ -47,9 +58,10 @@ const addMenu = e => {
   console.log(categories);  
 
   $menuName.value = '';
-}
 
+  makeMenuListItem();
+}
 $menuForm.addEventListener('submit', addMenu);
 
-console.log(addMenu)
+
 
