@@ -39,12 +39,23 @@ const selected = {
 }
 
 const makeMenuListItem = () => {
+  let $ul = document.querySelector('#menu-list')
+
   let menuList = categories.find(category => category.id === selected.category).menu;
   console.log(menuList);
 
   let $menuList = menuList.map(item => {
-    let item = document.createElement('menu-item');
-  })
+    let $item = document.createElement('menu-item');
+    console.log(item)
+    $item.setAttribute("menu-id", item.id);
+    $item.setAttribute("menu-name", item.text);
+    return $item;
+  });
+
+  console.log($ul);
+  console.log($menuList);
+
+  $ul.appendChild(...$menuList);
 }
 
 const addMenu = e => {

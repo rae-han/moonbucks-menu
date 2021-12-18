@@ -6,8 +6,8 @@ class MenuItem extends HTMLElement {
   }
 
   render() {
-    let id = this.getAttribute('id');
-    let name = this.getAttribute('text');
+    let id = this.getAttribute('menu-id');
+    let name = this.getAttribute('menu-name');
 
     let $li = document.createElement('li');
     $li.classList = "menu-list-item d-flex items-center py-2";
