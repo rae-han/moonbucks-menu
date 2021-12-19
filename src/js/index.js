@@ -1,6 +1,6 @@
 console.log('javascipt');
 
-import './customElement.js';
+import { makeMenuItem } from './customElement.js';
 
 // Elements
 const $menuForm = document.querySelector('#menuForm');
@@ -45,10 +45,7 @@ const makeMenuListItem = () => {
   console.log(menuList);
 
   let $menuList = menuList.map(item => {
-    let $item = document.createElement('menu-item');
-    console.log(item)
-    $item.setAttribute("menu-id", item.id);
-    $item.setAttribute("menu-name", item.text);
+    let $item = makeMenuItem(item);
     return $item;
   });
 
