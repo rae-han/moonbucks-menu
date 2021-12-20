@@ -5,7 +5,9 @@ import { makeMenuItem } from './customElement.js';
 // Elements
 const $menuForm = document.querySelector('#menuForm');
 const $menuName = document.querySelector('#menuName');
-const $menuList = document.querySelector('#menu-list')
+const $menuList = document.querySelector('#menu-list');
+const $menuSubmitBtn = document.querySelector('#menu-submit-button');
+const $menuCount = document.querySelector('.menu-count');
 
 
 let categories = [
@@ -46,21 +48,48 @@ const removeChildElements = $el => {
   }
 }
 
+const updateMenu = menu => {
+  let newName = window.prompt("변경할 메뉴 명을 입력해주세요.");
+  menu.name = newName;
+  renderMenuList();
+}
+
+const removeMenu = menu => {
+  let canRemove = window.confirm("메뉴를 삭제 하시겠습니까?");
+  
+  if(!canRemove) return false;
+
+  const index = categories.findIndex(category => category.id === selected.category);
+  categories[index].menu;
+  const newMenu = categories[index].menu.filter(menuItem => menuItem.name !== menu.name);
+  categories[index].menu = newMenu;
+  renderMenuList();
+}
+
+const removeMenuDelegation = ({ target }) => {
+  console.log(target);
+}
+
+const showMenuCount = ({ length }) => {
+  $menuCount.querySelector('span').textContent = length;
+}
+
 const renderMenuList = () => {
+  removeChildElements($menuList);
+
   let menuList = categories.find(category => category.id === selected.category).menu;
 
   let $newMenuList = menuList.map(item => {
-    let $item = makeMenuItem(item);
+    let $item = makeMenuItem(item, updateMenu, removeMenu);
     return $item;
   });
 
   $menuList.append(...$newMenuList);
+  showMenuCount($newMenuList);
 }
 
 function addMenu(e) {
   e.preventDefault();
-  removeChildElements($menuList);
-  console.log(this)
 
   const menuName = $menuName.value;
 
@@ -80,6 +109,7 @@ function addMenu(e) {
 }
 
 $menuForm.addEventListener('submit', addMenu);
+$menuSubmitBtn.addEventListener('click', addMenu);
 
 
 
