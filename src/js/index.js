@@ -5,6 +5,8 @@ import { makeMenuItem } from './customElement.js';
 // Elements
 const $menuForm = document.querySelector('#menuForm');
 const $menuName = document.querySelector('#menuName');
+let $menuList = document.querySelector('#menu-list')
+
 
 let categories = [
   { 
@@ -38,36 +40,41 @@ const selected = {
   category: 'espresso',
 }
 
-const makeMenuListItem = () => {
-  let $ul = document.querySelector('#menu-list')
+const removeChildElements = $el => {
+  while($el.hasChildNodes()) {
+    $el.removeChild($el.firstChild);
+  }
+}
 
+const renderMenuList = () => {
   let menuList = categories.find(category => category.id === selected.category).menu;
   console.log(menuList);
 
-  let $menuList = menuList.map(item => {
+  let $newMenuList = menuList.map(item => {
+    console.log(item)
     let $item = makeMenuItem(item);
     return $item;
   });
 
-  console.log($ul);
   console.log($menuList);
+  console.log($newMenuList);
 
-  $ul.appendChild(...$menuList);
+  $menuList.append(...$newMenuList);
 }
 
 const addMenu = e => {
   e.preventDefault();
+  removeChildElements($menuList);
 
   const menuName = $menuName.value;
 
   if(menuName === '') return false;
 
   categories = categories.map(category => category.id === selected.category ? { ...category, menu: category.menu.concat(menuName) }  : category);
-  console.log(categories);  
 
   $menuName.value = '';
 
-  makeMenuListItem();
+  renderMenuList();
 }
 $menuForm.addEventListener('submit', addMenu);
 
