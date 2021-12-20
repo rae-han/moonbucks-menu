@@ -39,7 +39,7 @@ export const makeMenuItem = menu => {
 
   let $span = document.createElement('span');
   $span.classList = "w-100 pl-2 menu-name";
-  $span.textContent = menu;
+  $span.textContent = menu.name;
   $li.appendChild($span);
 
   let $updateBtn = document.createElement('button');

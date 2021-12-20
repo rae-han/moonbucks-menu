@@ -5,7 +5,7 @@ import { makeMenuItem } from './customElement.js';
 // Elements
 const $menuForm = document.querySelector('#menuForm');
 const $menuName = document.querySelector('#menuName');
-let $menuList = document.querySelector('#menu-list')
+const $menuList = document.querySelector('#menu-list')
 
 
 let categories = [
@@ -48,34 +48,37 @@ const removeChildElements = $el => {
 
 const renderMenuList = () => {
   let menuList = categories.find(category => category.id === selected.category).menu;
-  console.log(menuList);
 
   let $newMenuList = menuList.map(item => {
-    console.log(item)
     let $item = makeMenuItem(item);
     return $item;
   });
 
-  console.log($menuList);
-  console.log($newMenuList);
-
   $menuList.append(...$newMenuList);
 }
 
-const addMenu = e => {
+function addMenu(e) {
   e.preventDefault();
   removeChildElements($menuList);
+  console.log(this)
 
   const menuName = $menuName.value;
 
   if(menuName === '') return false;
 
-  categories = categories.map(category => category.id === selected.category ? { ...category, menu: category.menu.concat(menuName) }  : category);
+  const menu = {
+    enabled: true,
+    name: $menuName.value
+  }
+
+  // categories = categories.map(category => category.id === selected.category ? { ...category, menu: category.menu.concat(menuName) }  : category);
+  categories = categories.map(category => category.id === selected.category ? { ...category, menu: [...category.menu, menu] }  : category);
 
   $menuName.value = '';
 
   renderMenuList();
 }
+
 $menuForm.addEventListener('submit', addMenu);
 
 
