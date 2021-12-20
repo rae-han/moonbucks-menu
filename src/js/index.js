@@ -14,7 +14,12 @@ let categories = [
   { 
     id: 'espresso',
     text: '☕ 에스프레소',
-    menu: []
+    menu: [
+      { enabled: true, name: 'Espresso' },
+      { enabled: false, name: 'Americano' },
+      { enabled: true, name: 'Caffè Latte' },
+      { enabled: false, name: 'Cappuccino' },
+    ]
   },
   { 
     id: 'frappuccino',
@@ -48,27 +53,33 @@ const removeChildElements = $el => {
   }
 }
 
-const updateMenu = menu => {
+const updateMenu = ({ target }) => {
+  if(!target.matches('#menu-list > .menu-list-item > .menu-edit-button')) return;
   let newName = window.prompt("변경할 메뉴 명을 입력해주세요.");
-  menu.name = newName;
+  // menu.name = newName;
+
+  const menuName = target.parentNode.querySelector('.menu-name').textContent;
+  const categoryIndex = categories.findIndex(category => category.id === selected.category);
+
+  categories[categoryIndex].menu = categories[categoryIndex].menu.map(menu => menu.name === menuName ? { ...menu, name: newName } : menu);
+
   renderMenuList();
 }
 
-const removeMenu = menu => {
-  let canRemove = window.confirm("메뉴를 삭제 하시겠습니까?");
-  
-  if(!canRemove) return false;
+$menuList.addEventListener('click', updateMenu)
 
-  const index = categories.findIndex(category => category.id === selected.category);
-  categories[index].menu;
-  const newMenu = categories[index].menu.filter(menuItem => menuItem.name !== menu.name);
-  categories[index].menu = newMenu;
+const removeMenu = ({ target }) => {
+  if(!target.matches('#menu-list > .menu-list-item > .menu-remove-button')) return;
+  if(!window.confirm('메뉴를 삭제 하시겠습니까?')) return;
+
+  const menuName = target.parentNode.querySelector('.menu-name').textContent;
+  const categoryIndex = categories.findIndex(category => category.id === selected.category);
+
+  categories[categoryIndex].menu = categories[categoryIndex].menu.filter(menu => menu.name !== menuName);
+
   renderMenuList();
 }
-
-const removeMenuDelegation = ({ target }) => {
-  console.log(target);
-}
+$menuList.addEventListener('click', removeMenu)
 
 const showMenuCount = ({ length }) => {
   $menuCount.querySelector('span').textContent = length;
@@ -80,7 +91,7 @@ const renderMenuList = () => {
   let menuList = categories.find(category => category.id === selected.category).menu;
 
   let $newMenuList = menuList.map(item => {
-    let $item = makeMenuItem(item, updateMenu, removeMenu);
+    let $item = makeMenuItem(item, updateMenu);
     return $item;
   });
 
@@ -110,6 +121,10 @@ function addMenu(e) {
 
 $menuForm.addEventListener('submit', addMenu);
 $menuSubmitBtn.addEventListener('click', addMenu);
+
+window.onload = () => {
+  renderMenuList();
+}
 
 
 

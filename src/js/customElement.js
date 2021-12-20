@@ -33,7 +33,7 @@ class MenuItem extends HTMLElement {
 
 customElements.define('menu-item', MenuItem);
 
-export const makeMenuItem = (menu, updateMenu, removeMenu) => {
+export const makeMenuItem = (menu) => {
   let $li = document.createElement('li');
   $li.classList = "menu-list-item d-flex items-center py-2";
 
@@ -45,13 +45,11 @@ export const makeMenuItem = (menu, updateMenu, removeMenu) => {
   let $updateBtn = document.createElement('button');
   $updateBtn.classList = "bg-gray-50 text-gray-500 text-sm mr-1 menu-edit-button";
   $updateBtn.textContent = "수정";
-  $updateBtn.addEventListener('click', () => updateMenu(menu));
   $li.appendChild($updateBtn);
 
   let $removeBtn = document.createElement('button');
   $removeBtn.classList = "bg-gray-50 text-gray-500 text-sm menu-remove-button";
   $removeBtn.textContent = "삭제";
-  $removeBtn.addEventListener('click', () => removeMenu(menu));
   $li.appendChild($removeBtn);
 
   return $li;
