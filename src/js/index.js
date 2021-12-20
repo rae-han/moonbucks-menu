@@ -1,6 +1,7 @@
-console.log('javascipt');
-
 import { makeMenuItem } from './customElement.js';
+
+// localStorage
+const moonbucksStorage = window.localStorage;
 
 // Elements
 const $menuForm = document.querySelector('#menuForm');
@@ -8,6 +9,7 @@ const $menuName = document.querySelector('#menuName');
 const $menuList = document.querySelector('#menu-list');
 const $menuSubmitBtn = document.querySelector('#menu-submit-button');
 const $menuCount = document.querySelector('.menu-count');
+const $categoryNav = document.querySelector('#categoryNav');
 
 
 let categories = [
@@ -55,8 +57,8 @@ const removeChildElements = $el => {
 
 const updateMenu = ({ target }) => {
   if(!target.matches('#menu-list > .menu-list-item > .menu-edit-button')) return;
-  let newName = window.prompt("변경할 메뉴 명을 입력해주세요.");
-  // menu.name = newName;
+  // let newName = window.prompt("변경할 메뉴 명을 입력해주세요.");
+  let newName = 'modify';
 
   const menuName = target.parentNode.querySelector('.menu-name').textContent;
   const categoryIndex = categories.findIndex(category => category.id === selected.category);
@@ -66,11 +68,11 @@ const updateMenu = ({ target }) => {
   renderMenuList();
 }
 
-$menuList.addEventListener('click', updateMenu)
+$menuList.addEventListener('click', updateMenu, () => console.log(1))
 
 const removeMenu = ({ target }) => {
   if(!target.matches('#menu-list > .menu-list-item > .menu-remove-button')) return;
-  if(!window.confirm('메뉴를 삭제 하시겠습니까?')) return;
+  // if(!window.confirm('메뉴를 삭제 하시겠습니까?')) return;
 
   const menuName = target.parentNode.querySelector('.menu-name').textContent;
   const categoryIndex = categories.findIndex(category => category.id === selected.category);
@@ -79,7 +81,7 @@ const removeMenu = ({ target }) => {
 
   renderMenuList();
 }
-$menuList.addEventListener('click', removeMenu)
+$menuList.addEventListener('click', removeMenu, () => console.log(123))
 
 const showMenuCount = ({ length }) => {
   $menuCount.querySelector('span').textContent = length;
@@ -97,6 +99,7 @@ const renderMenuList = () => {
 
   $menuList.append(...$newMenuList);
   showMenuCount($newMenuList);
+  moonbucksStorage.setItem('categories', JSON.stringify(categories));
 }
 
 function addMenu(e) {
@@ -118,11 +121,25 @@ function addMenu(e) {
 
   renderMenuList();
 }
-
 $menuForm.addEventListener('submit', addMenu);
 $menuSubmitBtn.addEventListener('click', addMenu);
 
+const selectCategory = ({ target }) => {
+  if(!target.matches('#categoryNav > button')) return;
+  let categoryName = target.dataset.categoryName;
+  selected.category = categoryName;
+  renderMenuList();
+}
+$categoryNav.addEventListener('click', selectCategory);
+
+
+
+
 window.onload = () => {
+  const localStorageData = moonbucksStorage.getItem('categories');
+  if(localStorageData) {
+    categories = JSON.parse(localStorageData);
+  }
   renderMenuList();
 }
 
