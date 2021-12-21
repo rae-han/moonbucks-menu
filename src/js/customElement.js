@@ -33,12 +33,21 @@ class MenuItem extends HTMLElement {
 
 customElements.define('menu-item', MenuItem);
 
-export const makeMenuItem = (menu) => {
+export const makeCategoryItem = category => {
+  let $button = document.createElement('button');
+  $button.classList = "cafe-category-name btn bg-white shadow mx-1";
+  $button.setAttribute('data-category-name', category.id);
+  $button.textContent = category.text;
+
+  return $button;
+}
+
+export const makeMenuItem = menu => {
   let $li = document.createElement('li');
   $li.classList = "menu-list-item d-flex items-center py-2";
 
   let $span = document.createElement('span');
-  $span.classList = `w-100 pl-2 menu-name${menu.enabled ? '' : ' sold-out'}`;
+  $span.classList = `w-100 pl-2 menu-name${menu.isSoldOut ? '' : ' sold-out'}`;
   $span.textContent = menu.name;
   $li.appendChild($span);
 

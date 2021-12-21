@@ -1,4 +1,4 @@
-import { makeMenuItem } from './customElement.js';
+import { makeMenuItem, makeCategoryItem } from './customElement.js';
 
 // localStorage
 const moonbucksStorage = window.localStorage;
@@ -10,6 +10,7 @@ const $menuList = document.querySelector('#menu-list');
 const $menuSubmitBtn = document.querySelector('#menu-submit-button');
 const $menuCount = document.querySelector('.menu-count');
 const $categoryNav = document.querySelector('#categoryNav');
+const $currentCategory = document.querySelector('#currentCategory');
 
 
 let categories = [
@@ -17,10 +18,10 @@ let categories = [
     id: 'espresso',
     text: '☕ 에스프레소',
     menu: [
-      { enabled: true, name: 'Espresso' },
-      { enabled: false, name: 'Americano' },
-      { enabled: true, name: 'Caffè Latte' },
-      { enabled: false, name: 'Cappuccino' },
+      { isSoldOut: true, name: 'Espresso' },
+      { isSoldOut: false, name: 'Americano' },
+      { isSoldOut: true, name: 'Caffè Latte' },
+      { isSoldOut: false, name: 'Cappuccino' },
     ]
   },
   { 
@@ -40,7 +41,7 @@ let categories = [
   },
   { 
     id: 'desert',
-    text: '🍰 디저트s',
+    text: '🍰 디저트',
     menu: []
   },
 ];
@@ -89,7 +90,7 @@ const toggleMenuEnable = ({ target }) => {
   const menuName = target.parentNode.querySelector('.menu-name').textContent;
   const categoryIndex = categories.findIndex(category => category.id === selected.category);
 
-  categories[categoryIndex].menu = categories[categoryIndex].menu.map(menu => menu.name === menuName ? { ...menu, enabled: !menu.enabled } : menu);
+  categories[categoryIndex].menu = categories[categoryIndex].menu.map(menu => menu.name === menuName ? { ...menu, isSoldOut: !menu.isSoldOut } : menu);
 
   console.log(categories[categoryIndex]);
 
@@ -125,7 +126,7 @@ function addMenu(e) {
   if(menuName === '') return false;
 
   const menu = {
-    enabled: true,
+    isSoldOut: true,
     name: $menuName.value
   }
 
@@ -144,14 +145,23 @@ const selectCategory = ({ target }) => {
   let categoryName = target.dataset.categoryName;
   selected.category = categoryName;
   renderMenuList();
+
+  $currentCategory.textContent = categories.find(category => category.id === categoryName).text;
 }
 $categoryNav.addEventListener('click', selectCategory);
+
+const renderCategoryList = () => {
+  let categoryList = categories.map(category => makeCategoryItem(category));
+
+  $categoryNav.append(...categoryList);
+}
 
 window.onload = () => {
   const localStorageData = moonbucksStorage.getItem('categories');
   if(localStorageData) {
     categories = JSON.parse(localStorageData);
   }
+  renderCategoryList();
   renderMenuList();
 }
 
