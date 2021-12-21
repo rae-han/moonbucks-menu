@@ -38,9 +38,14 @@ export const makeMenuItem = (menu) => {
   $li.classList = "menu-list-item d-flex items-center py-2";
 
   let $span = document.createElement('span');
-  $span.classList = "w-100 pl-2 menu-name";
+  $span.classList = `w-100 pl-2 menu-name${menu.enabled ? '' : ' sold-out'}`;
   $span.textContent = menu.name;
   $li.appendChild($span);
+
+  let $toggleBtn = document.createElement('button');
+  $toggleBtn.classList = "bg-gray-50 text-gray-500 text-sm mr-1 menu-sold-out-button";
+  $toggleBtn.textContent = "품절";
+  $li.appendChild($toggleBtn);
 
   let $updateBtn = document.createElement('button');
   $updateBtn.classList = "bg-gray-50 text-gray-500 text-sm mr-1 menu-edit-button";

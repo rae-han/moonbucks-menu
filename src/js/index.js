@@ -81,7 +81,22 @@ const removeMenu = ({ target }) => {
 
   renderMenuList();
 }
-$menuList.addEventListener('click', removeMenu, () => console.log(123))
+$menuList.addEventListener('click', removeMenu)
+
+const toggleMenuEnable = ({ target }) => {
+  if(!target.matches('#menu-list > .menu-list-item > .menu-sold-out-button')) return;
+
+  const menuName = target.parentNode.querySelector('.menu-name').textContent;
+  const categoryIndex = categories.findIndex(category => category.id === selected.category);
+
+  categories[categoryIndex].menu = categories[categoryIndex].menu.map(menu => menu.name === menuName ? { ...menu, enabled: !menu.enabled } : menu);
+
+  console.log(categories[categoryIndex]);
+
+  renderMenuList();
+}
+$menuList.addEventListener('click', toggleMenuEnable)
+
 
 const showMenuCount = ({ length }) => {
   $menuCount.querySelector('span').textContent = length;
@@ -131,9 +146,6 @@ const selectCategory = ({ target }) => {
   renderMenuList();
 }
 $categoryNav.addEventListener('click', selectCategory);
-
-
-
 
 window.onload = () => {
   const localStorageData = moonbucksStorage.getItem('categories');
