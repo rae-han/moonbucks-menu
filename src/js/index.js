@@ -7,7 +7,7 @@ const addMenu = e => {
   const newName = $MenuName.value;
   
   $MenuName.value = '';
-
+  
   console.log(newName);
 
 };
